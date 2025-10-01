@@ -39,6 +39,8 @@ public class SnakeController : MonoBehaviour
             transform.position.y + direction.y,
             0.0f
             );
+
+        Debug.Log(direction);
     }
 }
 
