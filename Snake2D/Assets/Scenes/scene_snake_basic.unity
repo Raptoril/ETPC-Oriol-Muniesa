@@ -1443,17 +1443,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &1867995129 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2929252283123773951, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
-  m_PrefabInstance: {fileID: 581471696}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1935206088
 GameObject:
   m_ObjectHideFlags: 0
@@ -1546,10 +1535,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6580692125766297088, guid: 0dd67d2f6b9c8204193b859bea5a8bb0, type: 3}
-      propertyPath: joystick
-      value: 
-      objectReference: {fileID: 1867995129}
     - target: {fileID: 7138270106094059996, guid: 0dd67d2f6b9c8204193b859bea5a8bb0, type: 3}
       propertyPath: m_Size.x
       value: 0.75
