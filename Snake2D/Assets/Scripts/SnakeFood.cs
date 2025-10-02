@@ -17,8 +17,8 @@ public class SnakeFood : MonoBehaviour
         //float x = UnityEngine.Random.Range(-spawnTrigger.bounds.min.x, spawnTrigger.bounds.max.x);
         //float y = UnityEngine.Random.Range(-spawnTrigger.bounds.min.y, spawnTrigger.bounds.max.y);
 
-        float x = UnityEngine.Random.Range(-gridsize.x / 2, gridsize.x / 2);
-        float y = UnityEngine.Random.Range(-gridsize.y / 2, gridsize.y / 2);
+        float x = UnityEngine.Random.Range(-gridsize.x / 2 + 1, gridsize.x / 2 - 1);
+        float y = UnityEngine.Random.Range(-gridsize.y / 2 + 1, gridsize.y / 2 - 1);
         GameObject foodObject = Instantiate(food, new Vector2(Mathf.Round(x), Mathf.Round(y)), Quaternion.identity);
         foodObject.name = "SnakeFood";
     }

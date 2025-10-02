@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
@@ -24,10 +25,10 @@ public class SnakeController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Keyboard.current.wKey.wasPressedThisFrame) direction = Vector2.up;
-        if (Keyboard.current.sKey.wasPressedThisFrame) direction = Vector2.down;
-        if (Keyboard.current.dKey.wasPressedThisFrame) direction = Vector2.right;
-        if (Keyboard.current.aKey.wasPressedThisFrame) direction = Vector2.left;
+        if (Keyboard.current.wKey.wasPressedThisFrame && direction != Vector2.down) direction = Vector2.up;
+        if (Keyboard.current.sKey.wasPressedThisFrame && direction != Vector2.up) direction = Vector2.down;
+        if (Keyboard.current.dKey.wasPressedThisFrame && direction != Vector2.left) direction = Vector2.right;
+        if (Keyboard.current.aKey.wasPressedThisFrame && direction != Vector2.right) direction = Vector2.left;
 
         _timer += Time.deltaTime;
 
@@ -51,8 +52,22 @@ public class SnakeController : MonoBehaviour
             bodyInstance.transform.position = transform.position;
         }
 
+        // Get the collider from the body, and disable it for a few frames
+        {
+            BoxCollider2D box = bodyInstance.GetComponent<BoxCollider2D>();
+            box.enabled = false;
+            StartCoroutine(EnableCollider(box));
+        }
 
         bodyParts.Add(bodyInstance);
+
+        UIController.Instance.DisplayScore(bodyParts.Count);
+    }
+
+    IEnumerator EnableCollider(BoxCollider2D box)
+    {
+        yield return new WaitForSeconds(0.5f);
+        box.enabled = true;
     }
 
     private void Move()
@@ -73,10 +88,12 @@ public class SnakeController : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.collider.CompareTag("SnakeWall"))
+        if (col.collider.CompareTag("SnakeWall") || col.collider.CompareTag("SnakeBody"))
         {
             Debug.Log("GAME OVER");
             Time.timeScale = 0f;
+
+            UIController.Instance.DisplayGameOver();
         }
     }
 }
