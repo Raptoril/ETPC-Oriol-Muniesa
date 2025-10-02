@@ -1,12 +1,12 @@
-using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class SnakeController : MonoBehaviour
 {
+    public Joystick joystick;
+
     public GameObject body;
     public float speed = 5;
     public Vector2 direction = Vector2.up;
@@ -25,6 +25,15 @@ public class SnakeController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("Horizontal " + joystick.Horizontal);
+        Debug.Log("Vertical " + joystick.Vertical);
+
+        //if (joystick.Horizontal > 0) direction = Vector2.right;
+        //if (joystick.Horizontal < 0) direction = Vector2.left;
+
+        //if (joystick.Vertical > 0) direction = Vector2.up;
+        //if (joystick.Vertical < 0) direction = Vector2.down;
+
         if (Keyboard.current.wKey.wasPressedThisFrame && direction != Vector2.down) direction = Vector2.up;
         if (Keyboard.current.sKey.wasPressedThisFrame && direction != Vector2.up) direction = Vector2.down;
         if (Keyboard.current.dKey.wasPressedThisFrame && direction != Vector2.left) direction = Vector2.right;
