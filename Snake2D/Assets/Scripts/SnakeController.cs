@@ -13,6 +13,7 @@ public class SnakeController : MonoBehaviour
 
     private float _timer = 0;
     public float delayTime = 0.2f;
+    public float deadzone = 0.5f;
 
     public List<GameObject> bodyParts = new List<GameObject>();
 
@@ -25,14 +26,16 @@ public class SnakeController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Horizontal " + joystick.Horizontal);
-        Debug.Log("Vertical " + joystick.Vertical);
-
-        //if (joystick.Horizontal > 0) direction = Vector2.right;
-        //if (joystick.Horizontal < 0) direction = Vector2.left;
-
-        //if (joystick.Vertical > 0) direction = Vector2.up;
-        //if (joystick.Vertical < 0) direction = Vector2.down;
+        if(Mathf.Abs(joystick.Horizontal) > Mathf.Abs(joystick.Vertical))
+        {
+            if (joystick.Horizontal > deadzone && direction != Vector2.left) direction = Vector2.right;
+            else if (joystick.Horizontal < -deadzone && direction != Vector2.right) direction = Vector2.left;
+        }
+        else
+        {
+            if (joystick.Vertical > deadzone && direction != Vector2.down) direction = Vector2.up;
+            else if (joystick.Vertical < -deadzone && direction != Vector2.up) direction = Vector2.down;
+        }
 
         if (Keyboard.current.wKey.wasPressedThisFrame && direction != Vector2.down) direction = Vector2.up;
         if (Keyboard.current.sKey.wasPressedThisFrame && direction != Vector2.up) direction = Vector2.down;
