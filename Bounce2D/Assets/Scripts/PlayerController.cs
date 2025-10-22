@@ -51,11 +51,12 @@ public class PlayerController : MonoBehaviour
         _rigidbody.linearVelocity = _velocity;
     }
 
-    //private void OnCollisionStay2D(Collision2D collision)
-    //{
-    //    if(collision.relativeVelocity.y > -5f)
-    //    {
-    //        _rigidbody.AddForce(Vector2.up * 2f, ForceMode2D.Impulse);
-    //    }
-    //}
+    public void Respawn()
+    {
+        if(Checkpoint.current != null)
+        {
+            this.transform.position = Checkpoint.current.transform.position;
+            Time.timeScale = 1f;
+        }
+    }
 }
