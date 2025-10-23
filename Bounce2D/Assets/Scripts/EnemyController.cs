@@ -43,8 +43,7 @@ public class EnemyController : MonoBehaviour
             Debug.Log("El player ha muerto");
             Time.timeScale = 0f;
 
-            PlayerController playerCtr = collision.GetComponent<PlayerController>();
-            playerCtr.Respawn();
+            GameStateManager.instance.ChangeGameState(GameStateManager.GameState.OVER);
         }
     }
 }

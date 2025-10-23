@@ -21,6 +21,8 @@ public class EndLevel : MonoBehaviour
             Time.timeScale = 0.0f;
             Debug.Log("El nivel se ha terminado");
 
+            GameStateManager.instance.ChangeGameState(GameStateManager.GameState.WIN);
+
             // Load the next level
         }
     }
