@@ -11,6 +11,7 @@ public class UIController : MonoBehaviour
     public GameObject gamepause;
     public GameObject gamemain;
     public GameObject gameplay;
+    public GameObject gameovermain;
 
     public TextMeshProUGUI healths;
     public TextMeshProUGUI checkpoints;
@@ -18,8 +19,15 @@ public class UIController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        instance = this;   
-        DontDestroyOnLoad(gameObject);
+        if(instance != null)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 
     public void ActivateGameOver(bool state)
@@ -45,6 +53,11 @@ public class UIController : MonoBehaviour
     public void ActivateMain(bool state)
     {
         gamemain.SetActive(state);
+    }
+
+    public void ActivateOverMain(bool state)
+    {
+        gameovermain.SetActive(state);
     }
 
     public void SetHealths(int healthCount)

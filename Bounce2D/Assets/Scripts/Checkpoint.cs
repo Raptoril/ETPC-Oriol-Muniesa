@@ -23,6 +23,9 @@ public class Checkpoint : MonoBehaviour
             current = this;
             gameObject.SetActive(false);
 
+            PlayerController ctr = collision.gameObject.GetComponent<PlayerController>();
+            ctr.SetCheckpoint(this);
+
             // I wanna save player data
             //PlayerPrefs, is in charge of saving data (serializing)
         }

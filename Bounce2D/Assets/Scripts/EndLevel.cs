@@ -18,12 +18,19 @@ public class EndLevel : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            Time.timeScale = 0.0f;
-            Debug.Log("El nivel se ha terminado");
+            PlayerController ctr = collision.gameObject.GetComponent<PlayerController>();
+            
+            if(ctr.GetCheckpointObtained() != 0)
+            {
+                Debug.Log("No has cogido todos los checkpoints");
+            }
+            else
+            {
+                Debug.Log("El nivel se ha terminado");
 
-            GameStateManager.instance.ChangeGameState(GameStateManager.GameState.WIN);
-
-            // Load the next level
+                // Load the next level
+                GameStateManager.instance.ChangeGameState(GameStateManager.GameState.WIN);
+            }
         }
     }
 }

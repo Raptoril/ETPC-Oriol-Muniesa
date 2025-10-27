@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +10,7 @@ public class GameStateManager : MonoBehaviour
     {
         WIN,
         OVER,
+        OVERMAIN,
         MAIN,
         PAUSE,
         GAMEPLAY
@@ -50,6 +52,7 @@ public class GameStateManager : MonoBehaviour
                     UIController.instance.ActivateGameWin(false);
                     UIController.instance.ActivateGamePause(false);
                     UIController.instance.ActivateMain(true);
+                    UIController.instance.ActivateOverMain(false);
 
                     SceneManager.LoadScene("spmap_mainmenu");
                     Time.timeScale = 1f;
@@ -64,8 +67,9 @@ public class GameStateManager : MonoBehaviour
                     UIController.instance.ActivateGameWin(false);
                     UIController.instance.ActivateGamePause(false);
                     UIController.instance.ActivateMain(false);
-                    Invoke(nameof(Respawn), 2f);
-                    Time.timeScale = 1f;
+                    UIController.instance.ActivateOverMain(false);
+                    StartCoroutine(Respawn());
+                    Time.timeScale = 0f;
 
                     currentState = GameState.OVER;
                     Debug.Log("HE MUERTO");
@@ -78,8 +82,9 @@ public class GameStateManager : MonoBehaviour
                     UIController.instance.ActivateGameWin(true);
                     UIController.instance.ActivateGamePause(false);
                     UIController.instance.ActivateMain(false);
-                    Time.timeScale = 1f;
-                    Invoke(nameof(RestartGame), 2f);
+                    UIController.instance.ActivateOverMain(false);
+                    Time.timeScale = 0f;
+                    StartCoroutine(RestartGame());
 
                     currentState = GameState.WIN;
                 }
@@ -91,6 +96,7 @@ public class GameStateManager : MonoBehaviour
                     UIController.instance.ActivateGameWin(false);
                     UIController.instance.ActivateGamePause(true);
                     UIController.instance.ActivateMain(false);
+                    UIController.instance.ActivateOverMain(false);
                     Time.timeScale = 0f;
 
                     currentState = GameState.PAUSE;
@@ -103,25 +109,45 @@ public class GameStateManager : MonoBehaviour
                     UIController.instance.ActivateGameWin(false);
                     UIController.instance.ActivateGamePause(false);
                     UIController.instance.ActivateMain(false);
+                    UIController.instance.ActivateOverMain(false);
                     Time.timeScale = 1f;
 
                     currentState = GameState.GAMEPLAY;
                 }
                 break;
+            case GameState.OVERMAIN:
+                {
+                    UIController.instance.ActivateGamePlay(false);
+                    UIController.instance.ActivateGameOver(false);
+                    UIController.instance.ActivateGameWin(false);
+                    UIController.instance.ActivateGamePause(false);
+                    UIController.instance.ActivateMain(false);
+                    UIController.instance.ActivateOverMain(true);
+                    Time.timeScale = 0f;
+
+                    StartCoroutine(RestartGame());
+                    currentState = GameState.OVERMAIN;
+                }
+                break;
         }
     }
 
-    private void Respawn()
+    private IEnumerator Respawn()
     {
+        yield return new WaitForSecondsRealtime(2f);
+
+        Debug.Log("RESPAWNING");
+
         PlayerController pctr = FindAnyObjectByType<PlayerController>();
         pctr.Respawn();
-        Debug.Log("RESPAWNING");
 
         ChangeGameState(GameState.GAMEPLAY);
     }
 
-    private void RestartGame()
+    private IEnumerator RestartGame()
     {
+        yield return new WaitForSecondsRealtime(2f);
+
         ChangeGameState(GameState.MAIN);
     }
 }
