@@ -2,24 +2,26 @@ using UnityEngine;
 
 public class SlingshotController : MonoBehaviour
 {
-    [SerializeField] private Transform _currentBird;
+    public static SlingshotController instance;
+
+    [SerializeField] private BirdController _currentBird;
     [SerializeField] private Transform _startPosition;
     [SerializeField] private float _force = 350f;
     [SerializeField] private float _maxDistance = 3f;
 
-    private Rigidbody2D _birdRb;
     private Camera _camera;
     private bool _isDragging;
     private Vector2 _startOrigin;
+    private Vector2 _direction;
+    private float _distance;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _birdRb = _currentBird.GetComponent<Rigidbody2D>();
-        _birdRb.bodyType = RigidbodyType2D.Kinematic;
-
         _camera = Camera.main;
         _startOrigin = new Vector2(_startPosition.position.x, _startPosition.position.y);
+
+        instance = this;
     }
 
     // Update is called once per frame
@@ -39,7 +41,7 @@ public class SlingshotController : MonoBehaviour
         {
             _isDragging = false;
 
-            OnShot();
+            Shot();
         }
 
         OnDrag();
@@ -50,22 +52,54 @@ public class SlingshotController : MonoBehaviour
         if (_isDragging)
         {
             Vector2 position = _camera.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 direction = position - _startOrigin;
+            _direction = position - _startOrigin;
 
-            if (direction.magnitude > _maxDistance)
+            if (_direction.magnitude > _maxDistance)
             {
-                position = _startOrigin + direction.normalized * _maxDistance;
+                position = _startOrigin + _direction.normalized * _maxDistance;
+                _distance = Mathf.Clamp(Vector2.Distance(position, _startOrigin),0, _maxDistance);
             }
             
-            _currentBird.position = position;
+            _currentBird.transform.position = position;
         }
     }
 
-    public void OnShot()
+    public void Shot()
     {
-        _birdRb.bodyType = RigidbodyType2D.Dynamic;
+        _currentBird.Rbody.bodyType = RigidbodyType2D.Dynamic;
 
-        Vector2 direction = _startPosition.position - _currentBird.position;
-        _birdRb.AddForce(direction.normalized * _force);
+        float forceImpulse = _distance / _maxDistance;
+        Vector2 direction = _startPosition.position - _currentBird.transform.position;
+        _currentBird.Rbody.AddForce(direction.normalized * _force * forceImpulse);
+
+        Invoke(nameof(ActivateBird), 0.1f);
+    }
+    public void Reload()
+    {
+        // We have to reload the new bird from the ammocontroller
+        _currentBird = AmmoController.instance.Reload();
+
+        if (_currentBird != null)
+        {
+            _currentBird.transform.position = _startPosition.position;
+
+            // We need to move the camera to its original position
+            CameraController.instance.ResetCamera();
+        }
+        else
+        {
+            // The game is over.
+        }
+    }
+
+    public void ActivateBird()
+    {
+        BirdController bird = _currentBird.GetComponent<BirdController>();
+        bird.SetBirdActive(true);
+    }
+
+    public Transform GetCurrentBird()
+    {
+        return _currentBird.transform;
     }
 }
