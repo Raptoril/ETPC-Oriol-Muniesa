@@ -1,31 +1,49 @@
+using System;
 using UnityEngine;
 
 public class BirdController : MonoBehaviour
 {
-    private bool _isActive = false;
+    protected bool isActive = false;
+    public float trailDelay = 0.3f;
+    public Transform trailSprite;
+
     [HideInInspector] public Rigidbody2D Rbody;
 
+    private float _timeSpan = 0f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected void Initialize()
     {
         Rbody = GetComponent<Rigidbody2D>();
     }
 
-    private void Update()
+    protected void DetectAlive()
     {
-        if(_isActive)
+        if (Rbody.linearVelocity.magnitude < 0.4f)
         {
-            if(Rbody.linearVelocity.magnitude < 0.1f)
-            {
-                Debug.Log("El pajaro esta quieto");
-                _isActive = false;
+            isActive = false;
 
-                SlingshotController.instance.Reload();
-            }
+            SlingshotController.instance.Reload();
         }
     }
+
     public void SetBirdActive(bool activate)
     {
-        _isActive = activate;
+        isActive = activate;
+    }
+
+    public void DrawTrace()
+    {
+        if (isActive)
+        {
+            _timeSpan = _timeSpan + Time.deltaTime;
+
+            if(_timeSpan > 0.03)
+            {
+                Transform trail = Instantiate(trailSprite, transform.position, Quaternion.identity);
+                trail.localScale = UnityEngine.Random.Range(0.5f, 1.2f) * Vector3.one;
+                _timeSpan = 0f;
+            }
+        }
     }
 }
