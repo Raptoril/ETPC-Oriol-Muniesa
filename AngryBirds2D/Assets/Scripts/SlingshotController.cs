@@ -66,8 +66,9 @@ public class SlingshotController : MonoBehaviour
             if (_direction.magnitude > _maxDistance)
             {
                 position = _startOrigin + _direction.normalized * _maxDistance;
-                _distance = Mathf.Clamp(Vector2.Distance(position, _startOrigin),0, _maxDistance);
             }
+
+            _distance = (position - _startOrigin).magnitude;
 
             Vector3 ropePosition = position + _direction.normalized * 0.15f;
             Vector3 mappedLine = new Vector3(ropePosition.x, ropePosition.y, 0);
@@ -95,6 +96,7 @@ public class SlingshotController : MonoBehaviour
         float forceImpulse = _distance / _maxDistance;
         Vector2 direction = _startPosition.position - _currentBird.transform.position;
         _currentBird.Rbody.AddForce(direction.normalized * _force * forceImpulse);
+        Debug.Log(_distance + " " + _maxDistance + " -- " + forceImpulse);
 
         Invoke(nameof(ActivateBird), 0.1f);
     }

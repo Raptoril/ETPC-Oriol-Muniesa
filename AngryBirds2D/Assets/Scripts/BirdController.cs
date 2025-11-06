@@ -9,14 +9,15 @@ public class BirdController : MonoBehaviour
 
     [HideInInspector] public Rigidbody2D Rbody;
 
-    private float _timeSpan = 0f;
+    private Vector3 _timePosition;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected void Initialize()
     {
         Rbody = GetComponent<Rigidbody2D>();
+        _timePosition = transform.position;
     }
-
+     
     protected void DetectAlive()
     {
         if (Rbody.linearVelocity.magnitude < 0.4f)
@@ -36,13 +37,14 @@ public class BirdController : MonoBehaviour
     {
         if (isActive)
         {
-            _timeSpan = _timeSpan + Time.deltaTime;
+            float dist = Vector2.Distance(_timePosition, transform.position);
 
-            if(_timeSpan > 0.03)
+            if(dist > 0.4)
             {
                 Transform trail = Instantiate(trailSprite, transform.position, Quaternion.identity);
                 trail.localScale = UnityEngine.Random.Range(0.5f, 1.2f) * Vector3.one;
-                _timeSpan = 0f;
+                
+                _timePosition = transform.position;
             }
         }
     }
