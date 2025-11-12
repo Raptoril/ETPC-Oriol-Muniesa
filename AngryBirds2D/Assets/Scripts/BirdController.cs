@@ -28,6 +28,11 @@ public class BirdController : MonoBehaviour
         }
     }
 
+    public void ReloadNext()
+    {
+        SlingshotController.instance.Reload();
+    }
+
     public void SetBirdActive(bool activate)
     {
         isActive = activate;
