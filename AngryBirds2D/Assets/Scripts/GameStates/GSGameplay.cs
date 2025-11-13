@@ -5,7 +5,10 @@ public class GSGameplay: GameState
 {
     public override void OnEnter()
     {
-
+        if (SlingshotController.instance != null)
+        {
+            SlingshotController.instance.isActive = true;
+        }
     }
 
     public override void OnUpdate()
@@ -18,6 +21,6 @@ public class GSGameplay: GameState
 
     public override void OnExit()
     {
-
+        SlingshotController.instance.isActive = false;
     }
 }

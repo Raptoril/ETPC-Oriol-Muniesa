@@ -19,6 +19,8 @@ public class SlingshotController : MonoBehaviour
     private Vector2 _direction;
     private float _distance;
 
+    public bool isActive = true;
+
     private float _timelerp = 0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -34,6 +36,11 @@ public class SlingshotController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isActive)
+        {
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             _isDragging = false;
@@ -104,10 +111,10 @@ public class SlingshotController : MonoBehaviour
     {
         // We have to reload the new bird from the ammocontroller
         _currentBird = AmmoController.instance.Reload();
-        _currentTarget = _currentBird.transform;
 
         if (_currentBird != null)
         {
+            _currentTarget = _currentBird.transform;
             _currentBird.transform.position = _startPosition.position;
 
             // We need to move the camera to its original position
