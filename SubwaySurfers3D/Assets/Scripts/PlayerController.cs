@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public Transform render;
+
     public float forwardSpeed = 10f;
     public float verticalSpeed = 20f;
     public float laneSwapSpeed = 5f;
@@ -98,11 +100,17 @@ public class PlayerController : MonoBehaviour
         _charCtr.center = Vector3.up * slideHeight;
         _charCtr.height = oldHeight * slideHeight;
 
+        render.localScale = new Vector3(0.7f, 0.4f, 0.7f);
+        render.transform.localPosition = Vector3.up * 0.4f;
+
         yield return new WaitForSeconds(slideTime);
 
         // Reset to default values
         _charCtr.center = oldCenter;
         _charCtr.height = oldHeight;
+
+        render.localScale = Vector3.one;
+        render.transform.localPosition = Vector3.up;
 
         _isSliding = false;
     }
