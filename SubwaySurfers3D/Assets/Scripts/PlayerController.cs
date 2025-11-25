@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -7,9 +8,17 @@ public class PlayerController : MonoBehaviour
     public float laneSwapSpeed = 5f;
     public float laneDistance = 4f;
 
-    // Lane change
-    public int currentLane = 1;
+    public float jumpHeight = 1f;
+    public float gravity = -9.81f;
 
+    public float slideHeight = 0.5f;
+    public float slideTime = 1f;
+
+    // Lane change
+    [HideInInspector] public int currentLane = 1;
+
+    private bool _isSliding = false;
+    private float _currentGravity = 0f;
     private Vector3 targetPosition;
     private CharacterController _charCtr;
 
@@ -31,16 +40,27 @@ public class PlayerController : MonoBehaviour
         {
             MoveLane(1);
         }
+
+        if (Input.GetKeyDown(KeyCode.Space) && _charCtr.isGrounded)
+        {
+            _currentGravity = jumpHeight;
+        }
+
+        if (Input.GetKeyDown(KeyCode.S) && !_isSliding)
+        {
+            StartCoroutine(Slide());
+        }
     }
     // Update is called once per frame
     private void FixedUpdate()
     {
+        ComputeGravity();
+
         Vector3 forwardMove = Vector3.forward * forwardSpeed * Time.fixedDeltaTime;
-        Vector3 verticalMove = Vector3.down * 0.5f;
+        Vector3 verticalMove = Vector3.up * _currentGravity;
         Vector3 horizontalMove = Vector3.MoveTowards(_charCtr.transform.position, targetPosition, laneSwapSpeed * Time.fixedDeltaTime);
         horizontalMove = new Vector3(horizontalMove.x - transform.position.x, 0, 0);
         
-        Debug.Log(_charCtr.transform.position + " // " + targetPosition);
         _charCtr.Move(forwardMove + horizontalMove + verticalMove);
     }
 
@@ -57,13 +77,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void Jump()
+    public void ComputeGravity()
     {
+        if (_charCtr.isGrounded && _currentGravity < 0)
+        {
+            _currentGravity = -0.5f;
+        }
 
+        _currentGravity += gravity * Time.fixedDeltaTime;
     }
 
-    public void Slide()
+    public IEnumerator Slide()
     {
+        _isSliding = true;
 
+        // Set collider and visuals to sliding
+        Vector3 oldCenter = _charCtr.center;
+        float oldHeight = _charCtr.height;
+
+        _charCtr.center = Vector3.up * slideHeight;
+        _charCtr.height = oldHeight * slideHeight;
+
+        yield return new WaitForSeconds(slideTime);
+
+        // Reset to default values
+        _charCtr.center = oldCenter;
+        _charCtr.height = oldHeight;
+
+        _isSliding = false;
     }
 }
