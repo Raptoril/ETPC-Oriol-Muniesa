@@ -5,6 +5,7 @@ public class SlingshotController : MonoBehaviour
     public static SlingshotController instance;
 
     [SerializeField] private BirdController _currentBird;
+    [SerializeField] private BirdBlackController _currentBlack;
     [SerializeField] private Transform _startPosition;
     [SerializeField] private float _force = 350f;
     [SerializeField] private float _maxDistance = 3f;
@@ -99,10 +100,14 @@ public class SlingshotController : MonoBehaviour
     public void Shot()
     {
         _currentBird.Rbody.bodyType = RigidbodyType2D.Dynamic;
+        _currentBlack.Rbody.bodyType= RigidbodyType2D.Dynamic;
+        
 
         float forceImpulse = _distance / _maxDistance;
         Vector2 direction = _startPosition.position - _currentBird.transform.position;
+        Vector2 directionB = _startPosition.position - _currentBlack.transform.position;
         _currentBird.Rbody.AddForce(direction.normalized * _force * forceImpulse);
+        _currentBlack.Rbody.AddForce(directionB.normalized * _force * forceImpulse);
         Debug.Log(_distance + " " + _maxDistance + " -- " + forceImpulse);
 
         Invoke(nameof(ActivateBird), 0.1f);
