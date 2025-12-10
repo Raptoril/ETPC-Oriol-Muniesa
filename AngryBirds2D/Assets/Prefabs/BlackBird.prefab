@@ -142,7 +142,7 @@ Transform:
   m_GameObject: {fileID: 5509825325537293218}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.149756, y: -2.943054, z: 0}
+  m_LocalPosition: {x: -8.08448, y: -3.0690575, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -186,7 +186,7 @@ CircleCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 6a543f61b45ce1e4282b499199b27b92, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -261,8 +261,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BirdBlackController
   trailDelay: 0.3
-  trailSprite: {fileID: 0}
-  Rbody: {fileID: 0}
+  trailSprite: {fileID: 4272795928372317274, guid: 5711fedeb57bcea40bdedfbfcbf409ba, type: 3}
+  Rbody: {fileID: 6409164624801665307}
   RadioDeExplosion: 2.5
   FuerzaExplosiva: 350
   "Da\xF1oDeExplosion": 40
