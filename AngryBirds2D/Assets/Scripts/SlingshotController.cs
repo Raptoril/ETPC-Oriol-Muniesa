@@ -103,6 +103,7 @@ public class SlingshotController : MonoBehaviour
         _currentBlack.Rbody.bodyType= RigidbodyType2D.Dynamic;
         
 
+
         float forceImpulse = _distance / _maxDistance;
         Vector2 direction = _startPosition.position - _currentBird.transform.position;
         Vector2 directionB = _startPosition.position - _currentBlack.transform.position;
